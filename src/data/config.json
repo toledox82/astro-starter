@@ -1,6 +1,6 @@
 {
   "siteName": "Site Name",
-  "siteURL": "sitename.com.br",
+  "siteUrl": "sitename.com.br",
   "separator": "•",
   "title": "Site Title",
   "description": "Site Description",
@@ -8,7 +8,7 @@
     "src": "/images/og-image.jpg",
     "alt": "OG Image Alt"
   },
-  "gtmId": "",
+  "gtmId": "###",
   "whatsapp": "",
   "linkedin": "",
   "instagram": "",
