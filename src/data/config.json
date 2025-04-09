@@ -1,0 +1,17 @@
+{
+  "siteName": "Site Name",
+  "siteURL": "sitename.com.br",
+  "separator": "•",
+  "title": "Site Title",
+  "description": "Site Description",
+  "image": {
+    "src": "/images/og-image.jpg",
+    "alt": "OG Image Alt"
+  },
+  "gtmId": "",
+  "whatsapp": "",
+  "linkedin": "",
+  "instagram": "",
+  "youtube": "",
+  "tiktok": ""
+}

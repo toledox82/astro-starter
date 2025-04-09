@@ -1,0 +1,49 @@
+---
+import config from '@data/config.json';
+const gtmId = siteData?.gtmId;
+
+// assets
+import '@styles/global.css'
+
+// components
+import Seo from "@components/Seo.astro";
+const { title, description, image, frontmatter, noindex } = Astro.props;
+
+// others
+const isProd = import.meta.env.PROD;
+---
+<!doctype html>
+<html lang="pt-br">
+	<head>
+		<!-- Google Tag Manager -->
+		<script define:vars={{ gtmId }}>
+			(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+				new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+				j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+				'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+				})(window,document,'script','dataLayer',gtmId);
+		</script>
+		<!-- End Google Tag Manager -->
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="author" content="Toledo Interactive" />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+		<Seo {title} {description} url={Astro.url} {image} {frontmatter} {noindex} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..700&family=Raleway:wght@400..700&display=swap" rel="stylesheet" />
+	</head>
+	<body class="bg-blue-dark text-white">
+		<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src={"https://www.googletagmanager.com/ns.html?id=" + gtmId}
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	[x-cloak] { display: none !important;}
+</style>
