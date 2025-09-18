@@ -1,21 +1,29 @@
 {
-  "name": "astro-website",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/alpinejs": "^0.4.5",
-    "@astrojs/sitemap": "^3.3.0",
-    "@tailwindcss/vite": "^4.0.5",
-    "@types/alpinejs": "^3.13.11",
-    "alpinejs": "^3.14.8",
-    "animate.css": "^4.1.1",
-    "astro": "^5.6.1",
-    "tailwindcss": "^4.0.5"
-  }
+	"name": "astro-website",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro"
+	},
+	"dependencies": {
+		"@astrojs/alpinejs": "^0.4.9",
+		"@astrojs/sitemap": "^3.6.0",
+		"@tailwindcss/vite": "^4.1.13",
+		"@types/alpinejs": "^3.13.11",
+		"alpinejs": "^3.15.0",
+		"astro": "^5.13.8",
+		"astro-lenis": "^1.0.5",
+		"lenis": "^1.3.11",
+		"sharp": "^0.34.4",
+		"tailwindcss": "^4.1.13"
+	},
+	"devDependencies": {
+		"@astrojs/ts-plugin": "^1.10.4",
+		"prettier": "^3.6.2",
+		"prettier-plugin-astro": "^0.14.1",
+		"prettier-plugin-tailwindcss": "^0.6.14"
+	}
 }

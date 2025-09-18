@@ -7,11 +7,5 @@
   "image": {
     "src": "/images/og-image.jpg",
     "alt": "OG Image Alt"
-  },
-  "gtmId": "###",
-  "whatsapp": "",
-  "linkedin": "",
-  "instagram": "",
-  "youtube": "",
-  "tiktok": ""
+  }
 }

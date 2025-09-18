@@ -1,28 +1,30 @@
 @import 'tailwindcss';
-@import 'animate.css';
 
 @theme {
-  /* Colors */
-  --color-blue: #131D35;
-  --color-blue-dark: #0D1425;
-  --color-blue-medium: #1D2E53;
-  --color-blue-light: #253B6A;
-  --color-golden: #DBB870;
-  --color-golden-dark: #AC8E53;
-  --color-golden-medium: #E5CC99;
-  --color-golden-light: #EFE0C2;
-  /* Font */
-  --font-sans: 'Open Sans', 'Arial', 'sans-serif';
-  --font-title: 'Raleway', 'Arial', 'sans-serif';
-  
-  /* Animations */
-  --animate-breathe: breathe 4s ease-in-out infinite;
-  @keyframes breathe {
-		0%, 100% {
-			box-shadow: 0px 0px 70px 5px rgba(37,59,106,0.5);
-		}
-		50% {
-			box-shadow: 0px 0px 130px 15px rgba(37,59,106,1);
-		}
-	}
+	/* Colors */
+	--color-primary: #131415;
+	--color-secondary: #ffffff;
+	--color-accent: #f0460a;
+	--color-accent2: #00eef6;
+	--color-background: #131415;
+	--color-alternative: #e3e4e5;
+	/* Font */
+	--font-title: 'Outfit', 'Arial', 'sans-serif';
+	--font-sans: 'Inter', 'Arial', 'sans-serif';
+}
+
+/* General */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-accent) transparent;
+}
+html,
+body {
+	@apply cursor-default scroll-smooth;
+}
+
+p + ul,
+ul + p,
+p + p {
+	@apply mt-4;
 }

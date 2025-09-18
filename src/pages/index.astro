@@ -1,40 +1,11 @@
 ---
-import Layout from '@layouts/Layout.astro';
-import config from '@data/config.json';
+import Layout from '@layouts/Layout.astro'
 
-// components
-import Social from '@components/Social.astro';
-import Credits from '@components/Credits.astro';
-
-// images
-import Image from 'astro/components/Image.astro';
-import logo from '@assets/logo.svg';
-
-// utils
-const button = 'font-title font-semibold px-4 md:px-8 py-2 text-md md:text-lg bg-blue-medium border-2 border-blue-light rounded-full hover:bg-blue-dark hover:border-golden/50 transition-all duration-300';
-const relExternal = 'external nofollow noopener';
+import Credits from '@components/Credits.astro'
 ---
 
 <Layout>
 	<main>
-		<div class="container mx-auto md:max-w-[400px]">
-			<div class="relative">
-				<div class="absolute bottom-0 w-full h-1/4 md:hidden bg-gradient-to-t from-blue-dark to-blue-dark/0"></div>
-			</div>
-			<div class="flex flex-col gap-6 px-8 md:px-4">
-				<h1>
-					<span class="hidden">{config.siteName}</span>
-					<Image
-						src={logo}
-						alt={config.title}
-						width="250"
-						loading="eager"
-						class="w-3/5"
-					/>
-				</h1>
-			</div>
-		</div>
-		<Social />
-		<Credits />	
+		<Credits />
 	</main>
 </Layout>
