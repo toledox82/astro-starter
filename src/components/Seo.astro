@@ -3,6 +3,7 @@ import config from '@data/config.json'
 const isHomePage = Astro.url.pathname === '/'
 let { title, description, url = Astro.url, image, type, frontmatter, noindex } = Astro.props
 title = isHomePage ? `${config.siteName} ${config.separator} ${config.title}` : `${title}`
+description = isHomePage ? `${config.description}` : `${description}`
 ---
 
 <title>{title || config.title}</title>
