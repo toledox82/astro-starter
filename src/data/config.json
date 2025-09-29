@@ -1,11 +1,11 @@
 {
-  "siteName": "Site Name",
-  "siteUrl": "sitename.com.br",
-  "separator": "•",
-  "title": "Site Title",
-  "description": "Site Description",
-  "image": {
-    "src": "/images/og-image.jpg",
-    "alt": "OG Image Alt"
-  }
+	"siteName": "Site Name",
+	"siteUrl": "marciotoledo.com",
+	"separator": "•",
+	"title": "Site Title",
+	"description": "Site Description",
+	"image": {
+		"src": "/images/og-image.jpg",
+		"alt": "OG Image Alt"
+	}
 }
