@@ -1,4 +1,4 @@
-# Astro Starter Kit: Minimal
+# Astro Starter Kit: Marcio Toledo
 
 ```sh
 pnpm install
