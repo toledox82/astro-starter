@@ -8,7 +8,7 @@ import alpinejs from '@astrojs/alpinejs'
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://toledointeractive.com',
+	site: 'https://marciotoledo.com',
 	trailingSlash: 'never',
 	vite: {
 		plugins: [tailwindcss()],
