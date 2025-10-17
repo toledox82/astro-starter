@@ -1,10 +1,17 @@
 ---
-import config from '@data/config.json';
+import config from '@data/config.json'
 
 // utils
-const currentYear = new Date().getFullYear(); 
+const currentYear = new Date().getFullYear()
 ---
-<div class="mt-8 px-4 text-xs text-center text-white/50 pb-16">
-  <span>© {currentYear} - {config.siteName}.<br />Todos os direitos reservados.</span>
-  <a href={"https://toledointeractive.com/?ref=" + config.siteUrl} target="_blank" rel="external" class="block mt-6 text-xs text-center font-semibold text-golden/50 hover:text-golden transition-all">// toledointeractive</a>
+
+<div class="mt-8 px-4 pb-16 text-center text-xs text-primary/50">
+	<span>© {currentYear} - {config.siteName}.<br />Todos os direitos reservados.</span>
+	<a
+		href={'https://toledointeractive.com/?ref=' + config.siteUrl}
+		target="_blank"
+		rel="external"
+		class="mt-6 block text-center text-xs font-semibold text-accent/50 transition-all hover:text-accent">
+		// toledointeractive
+	</a>
 </div>
