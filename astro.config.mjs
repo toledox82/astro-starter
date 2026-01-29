@@ -12,11 +12,5 @@ export default defineConfig({
 	vite: {
 		plugins: [tailwindcss()],
 	},
-	integrations: [
-		sitemap({
-			filter: (page) => !page.includes('404'),
-		}),
-		lenis(),
-		alpinejs(),
-	],
+	integrations: [sitemap(), lenis(), alpinejs()],
 })
