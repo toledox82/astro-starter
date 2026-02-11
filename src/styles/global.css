@@ -22,9 +22,3 @@ html,
 body {
 	@apply cursor-default scroll-smooth;
 }
-
-p + ul,
-ul + p,
-p + p {
-	@apply mt-4;
-}
