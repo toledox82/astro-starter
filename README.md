@@ -126,7 +126,7 @@ declare o adapter e acrescente `main` mais um binding em `assets.binding`.
 
 ## Sobre
 
-Feito por **Márcio Toledo** — desenvolvedor e consultor, tocando a
+Feito por **Marcio Toledo** — desenvolvedor e consultor, tocando a
 [Toledo Interactive](https://toledointeractive.com).
 
 - Site e portfólio: [marciotoledo.com](https://marciotoledo.com)
