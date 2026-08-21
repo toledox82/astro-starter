@@ -1,8 +1,10 @@
 # build output
 dist/
-
-# generated types
 .astro/
+
+# cloudflare
+.wrangler/
+.dev.vars
 
 # dependencies
 node_modules/
@@ -17,11 +19,12 @@ pnpm-debug.log*
 .env
 .env.production
 
-# macOS-specific files
+# macOS / editors
 .DS_Store
-
-# jetbrains setting folder
+.vscode/*
+!.vscode/extensions.json
 .idea/
 
 # claude code
 .claude/
+.playwright-mcp/

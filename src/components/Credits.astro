@@ -1,16 +1,15 @@
 ---
-import site from '@data/site.json'
+import site from '@/data/site.json'
 
-// utils
 const currentYear = new Date().getFullYear()
 ---
 
-<div class="mt-8 px-4 pb-16 text-center text-xs text-primary/50">
-	<span>© {currentYear} - {site.siteName}.<br />Todos os direitos reservados.</span>
+<div class="mt-8 px-4 pb-16 text-center text-xs text-secondary/50">
+	<span>© {currentYear} — {site.siteName}.<br />Todos os direitos reservados.</span>
 	<a
-		href={'https://toledointeractive.com/?ref=' + site.siteUrl}
+		href={`https://toledointeractive.com/?ref=${site.siteUrl}`}
 		target="_blank"
-		rel="external"
+		rel="external noopener"
 		class="mt-6 block text-center text-xs font-semibold text-accent/50 transition-all hover:text-accent">
 		// toledointeractive
 	</a>

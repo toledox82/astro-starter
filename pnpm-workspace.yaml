@@ -1,0 +1,7 @@
+# O pnpm 10+ bloqueia scripts de build de dependências por padrão. Estes
+# precisam compilar ou baixar binário na instalação — sem a liberação, o build
+# quebra com "Cannot find module ../build/Release/sharp" e o wrangler não sobe.
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true

@@ -1,0 +1,109 @@
+---
+/**
+ * Duas coisas que todo projeto acaba precisando, e que só ligam quando
+ * configuradas em src/data/site.json:
+ *
+ * 1. Captura os parâmetros de origem (UTMs e click-ids) na primeira página da
+ *    visita, guarda na sessão e injeta como campos ocultos em todo <form> — o
+ *    destino do formulário recebe de onde veio o lead junto com o cadastro.
+ *    A captura precisa acontecer na entrada porque a pessoa costuma navegar
+ *    antes de preencher: sem o sessionStorage, os parâmetros se perderiam no
+ *    primeiro clique.
+ *
+ * 2. O gtag do GA4, se `analytics.ga4` estiver preenchido.
+ */
+import site from '@/data/site.json'
+
+const ga4 = site.analytics?.ga4
+
+// O corpo do gtag sai daqui como string, e não escrito dentro do <script>, por
+// um motivo prático: o Prettier junta as linhas de um <script> aninhado numa
+// expressão `{...}` do Astro, e sem ponto e vírgula o arquivo quebra ao ser
+// formatado. Como string em frontmatter ele passa intacto.
+const gtagBootstrap = `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${ga4}');
+`
+---
+
+<script is:inline>
+	;(function () {
+		const PARAMS = [
+			'utm_source',
+			'utm_medium',
+			'utm_campaign',
+			'utm_content',
+			'utm_term',
+			'fbclid',
+			'gclid',
+			'msclkid',
+			'ttclid',
+			'ref',
+		]
+		const STORAGE_KEY = 'tracking_params'
+
+		function readStored() {
+			try {
+				return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}')
+			} catch {
+				return {}
+			}
+		}
+
+		function captureFromUrl(stored) {
+			const url = new URLSearchParams(window.location.search)
+			let changed = false
+			PARAMS.forEach((name) => {
+				const value = url.get(name)
+				// Só o primeiro valor da sessão conta: a origem é a que trouxe o
+				// visitante, não a da última página que ele abriu.
+				if (value && !stored[name]) {
+					stored[name] = value
+					changed = true
+				}
+			})
+			if (changed) {
+				try {
+					sessionStorage.setItem(STORAGE_KEY, JSON.stringify(stored))
+				} catch {}
+			}
+			return stored
+		}
+
+		function injectIntoForms(params) {
+			document.querySelectorAll('form').forEach((form) => {
+				Object.entries(params).forEach(([name, value]) => {
+					if (!value || form.querySelector(`input[name="${name}"]`)) return
+					const input = document.createElement('input')
+					input.type = 'hidden'
+					input.name = name
+					input.value = value
+					form.appendChild(input)
+				})
+			})
+		}
+
+		function run() {
+			const params = captureFromUrl(readStored())
+			if (!Object.keys(params).length) return
+			injectIntoForms(params)
+		}
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', run)
+		} else {
+			run()
+		}
+	})()
+</script>
+
+{
+	ga4 && (
+		<Fragment>
+			<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4}`} />
+			<script is:inline set:html={gtagBootstrap} />
+		</Fragment>
+	)
+}

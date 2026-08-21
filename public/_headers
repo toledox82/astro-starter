@@ -1,0 +1,110 @@
+# Cabeçalhos de resposta servidos pelo Cloudflare (Workers Static Assets/Pages).
+#
+# Não é o Astro que responde: o site é estático, sem Worker. Este arquivo é lido
+# pela camada de assets em runtime — ele é copiado de public/ para dist/ pelo
+# build, sem passar por bundler.
+#
+# Duas armadilhas ao editar:
+#   - a indentação dos cabeçalhos é obrigatória; sem ela a linha vira um padrão
+#     de rota e o header some sem erro nenhum
+#   - `/*` não cobre o que já está em cache: depois do deploy vale purgar antes
+#     de concluir que uma mudança não pegou
+
+/*
+  # Instrui o navegador a nunca mais usar HTTP neste host. Sem ele, a primeira
+  # visita de cada pessoa sai em texto claro antes do redirect 301 — que é
+  # exatamente a janela que o HSTS fecha.
+  #
+  #   max-age=31536000   um ano; abaixo disso os pré-carregadores recusam
+  #   includeSubDomains  vale para qualquer subdomínio
+  #   preload            candidata o domínio à lista embutida nos navegadores
+  #
+  # ATENÇÃO ao `preload`: o token aqui só torna o domínio elegível, não faz nada
+  # até ser submetido em hstspreload.org. Uma vez aceito, remover leva meses e
+  # nesse meio-tempo qualquer subdomínio que só saiba HTTP fica inacessível.
+  # Confirme que todo *.dominio serve HTTPS antes de submeter — ou remova o
+  # token e fique só com max-age + includeSubDomains.
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+  # Quanto da URL de origem viaja junto ao clicar num link de saída.
+  # `strict-origin-when-cross-origin` envia a URL inteira dentro do próprio
+  # site, só a origem para outros sites, e nada ao cair de HTTPS para HTTP.
+  #
+  # É o padrão dos navegadores atuais — declarar não muda o comportamento de um
+  # Chrome ou Firefox recente. Vale mesmo assim: navegadores antigos usavam
+  # `no-referrer-when-downgrade`, que entrega a URL completa a qualquer
+  # terceiro, e um padrão implícito não é uma decisão.
+  #
+  # Não aperte para `no-referrer`: o GA4 e as plataformas de anúncio leem o
+  # referrer, e cortá-lo cega o relatório de aquisição.
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # Impede o navegador de adivinhar o tipo de um arquivo pelo conteúdo quando o
+  # Content-Type já foi declarado. É o que evita que um upload interpretado como
+  # HTML ou JS execute no lugar de ser baixado.
+  X-Content-Type-Options: nosniff
+
+  # Recusa que o site seja carregado dentro de <iframe> de outra origem — a
+  # defesa contra clickjacking. Se algum dia precisar ser embutido por um
+  # parceiro, troque por `frame-ancestors` numa CSP em vez de afrouxar aqui.
+  X-Frame-Options: DENY
+
+  # Desliga as APIs sensíveis que o site não usa — inclusive para iframes de
+  # terceiros, que herdam o que a página permite. Libere caso a caso com
+  # `(self)`, ex.: `geolocation=(self)` quando houver busca por proximidade.
+  Permissions-Policy: camera=(), microphone=(), payment=(), geolocation=()
+
+  # Content-Security-Policy: DELIBERADAMENTE AUSENTE — não é esquecimento.
+  #
+  # Um scanner de SEO cobra este header por existência, não por conteúdo, então
+  # `default-src 'self'` passaria na auditoria e derrubaria GA4, pixels, vídeo
+  # embutido e widgets de formulário de uma vez. Não vale trocar funcionalidade
+  # por selo verde.
+  #
+  # O caminho certo, quando for a hora — nesta ordem:
+  #   1. subir só `Content-Security-Policy-Report-Only` em produção, com
+  #      `report-uri`, e deixar coletando tráfego real por alguns dias;
+  #   2. montar a lista de hosts a partir dos relatórios, não do código-fonte —
+  #      scripts de terceiros carregam outros domínios em runtime, e uma lista
+  #      escrita a partir de src/ começa errada;
+  #   3. resolver os <script> inline com hash ou nonce (nonce exige Worker);
+  #   4. só então trocar Report-Only pelo header real.
+  #
+  # Os quatro headers acima são declarações sem risco. Este não é.
+
+# ---------------------------------------------------------------------------
+# Cache dos assets com hash no nome.
+#
+# O padrão do Workers Static Assets é `public, max-age=0, must-revalidate`: o
+# navegador guarda o arquivo mas revalida a cada visita, o que custa um
+# round-trip antes de poder pintar.
+#
+# Tudo em /_astro/ leva hash de conteúdo no nome (Layout.B87iQRdj.css). Mudou o
+# conteúdo, muda o nome, e o navegador pede uma URL nova — então revalidar a URL
+# antiga nunca descobre nada. É o caso exato para `immutable`, que dispensa a
+# revalidação de vez. As fontes do astro:fonts saem daqui também, e pelo mesmo
+# motivo: revalidar fonte com preload atrasa exatamente o que o preload adianta.
+#
+# Um ano é o teto que os navegadores respeitam.
+#
+# ATENÇÃO: vale só para caminhos com hash. Não estenda para /*, ou o HTML passa
+# a ser servido velho por um ano e o site fica impossível de corrigir.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Favicons e ícones não têm hash no nome, então não podem ser `immutable`:
+# trocar o desenho mantém a URL. Um dia é o equilíbrio entre não repedir a cada
+# navegação e conseguir corrigir sem esperar um ano.
+/favicon.svg
+  Cache-Control: public, max-age=86400
+/favicon.ico
+  Cache-Control: public, max-age=86400
+/favicon.png
+  Cache-Control: public, max-age=86400
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400
+
+# O HTML fica de fora de propósito e segue no padrão que revalida sempre. É o
+# arquivo que precisa refletir um deploy na hora — inclusive porque é ele que
+# aponta para os nomes com hash acima. Servir HTML velho serviria também
+# referências velhas, e aí o `immutable` viraria problema em vez de ganho.

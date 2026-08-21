@@ -1,13 +1,12 @@
 {
 	"extends": "astro/tsconfigs/strict",
-	"include": [".astro/types.d.ts", "**/*", ".prettierrc"],
-	"exclude": ["dist"],
+	"include": [".astro/types.d.ts", "**/*"],
+	"exclude": ["dist", ".astro", ".wrangler"],
 	"compilerOptions": {
-		"allowImportingTsExtensions": true,
 		"allowSyntheticDefaultImports": true,
 		"baseUrl": ".",
 		"paths": {
-			"@*": ["src/*"]
+			"@/*": ["./src/*"]
 		},
 		"plugins": [
 			{

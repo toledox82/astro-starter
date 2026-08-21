@@ -1,11 +1,17 @@
 ---
-import Layout from '@layouts/Layout.astro'
-
-import Credits from '@components/Credits.astro'
+import Layout from '@/layouts/Layout.astro'
+import Credits from '@/components/Credits.astro'
+import site from '@/data/site.json'
 ---
 
 <Layout>
-	<main>
+	<section class="flex min-h-svh flex-col items-center justify-center px-4 text-center">
+		<h1 class="font-title text-5xl font-black text-secondary lg:text-7xl">
+			{site.siteName}
+		</h1>
+		<p class="mt-4 max-w-xl text-balance text-secondary/60">
+			{site.description}
+		</p>
 		<Credits />
-	</main>
+	</section>
 </Layout>

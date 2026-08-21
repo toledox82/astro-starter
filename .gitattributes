@@ -1,0 +1,16 @@
+# LF no repositório e no working tree, inclusive no Windows.
+#
+# Sem isto, o Git converte para CRLF no checkout enquanto o Prettier grava LF
+# (seu default), o que faz `pnpm format` marcar arquivos como modificados sem
+# nenhuma mudança real. O container de build do Cloudflare também é Linux.
+* text=auto eol=lf
+
+# Binários não passam por normalização de linha.
+*.ttf   binary
+*.woff  binary
+*.woff2 binary
+*.ico   binary
+*.png   binary
+*.jpg   binary
+*.webp  binary
+*.avif  binary

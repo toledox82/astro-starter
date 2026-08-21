@@ -1,11 +1,30 @@
 {
 	"siteName": "Site Name",
-	"siteUrl": "marciotoledo.com",
+	"siteUrl": "https://example.com",
 	"separator": "•",
 	"title": "Site Title",
 	"description": "Site Description",
+	"lang": "pt-br",
+	"author": "Toledo Interactive",
 	"image": {
 		"src": "/images/og-image.jpg",
 		"alt": "OG Image Alt"
-	}
+	},
+	"contact": {
+		"email": "",
+		"phone": "",
+		"whatsapp": "",
+		"whatsappMessage": "Olá, vim através do site e gostaria de mais informações."
+	},
+	"social": {
+		"instagram": "",
+		"linkedin": "",
+		"youtube": "",
+		"facebook": "",
+		"tiktok": ""
+	},
+	"analytics": {
+		"ga4": ""
+	},
+	"menu": [{ "name": "Home", "href": "/" }]
 }

@@ -1,0 +1,25 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+
+	// Site estático servido pelo Cloudflare Workers (Static Assets).
+	//
+	// Não existe campo `main`: sem rota de servidor, o Cloudflare entrega os
+	// arquivos direto da borda, sem invocar Worker nenhum. No dia em que alguma
+	// rota sair do prerender (form handler, API), instale `@astrojs/cloudflare`,
+	// declare o adapter no astro.config e acrescente aqui `main` apontando para
+	// o entry gerado mais um binding em `assets.binding`.
+	//
+	// Deploy: `pnpm deploy` (local) ou Workers Builds pela integração Git — nesse
+	// caso o Cloudflare roda `pnpm build` e publica `dist/` sozinho.
+	"name": "astro-starter",
+
+	// Trave a data ao criar o projeto e só mova de propósito: ela decide quais
+	// mudanças de comportamento do runtime valem para este Worker.
+	"compatibility_date": "2026-08-21",
+
+	"assets": {
+		"directory": "./dist",
+		// Serve dist/404.html quando a URL não casa com nenhum arquivo.
+		"not_found_handling": "404-page",
+	},
+}

@@ -1,24 +1,74 @@
 @import 'tailwindcss';
 
+/* Design tokens. Tudo que o projeto tem de identidade mora aqui — o Tailwind 4
+   não usa tailwind.config.mjs, e não existe um neste projeto de propósito. */
 @theme {
-	/* Colors */
+	/* Cores */
 	--color-primary: #131415;
 	--color-secondary: #ffffff;
 	--color-accent: #f0460a;
 	--color-accent2: #00eef6;
 	--color-background: #131415;
 	--color-alternative: #e3e4e5;
-	/* Font */
-	--font-title: 'Outfit', 'Arial', 'sans-serif';
-	--font-sans: 'Inter', 'Arial', 'sans-serif';
+
+	/* Fontes — apontam para as variáveis geradas pelo astro:fonts (declaradas
+	   em astro.config.mjs). Não escreva o nome da família aqui: isso passa por
+	   cima das métricas de fallback que o Astro calcula e traz de volta o pulo
+	   de layout na troca da fonte. */
+	--font-title: var(--font-outfit);
+	--font-sans: var(--font-inter);
+
+	/* Raio e sombra padrão */
+	--radius-default: 0.5rem;
+	--shadow-default: 0 4px 12px rgb(0 0 0 / 0.15);
 }
 
-/* General */
+/* Container centralizado com teto de ~1280px. */
+@utility container {
+	margin-inline: auto;
+	max-width: 80rem;
+}
+
+/* Geral */
 * {
 	scrollbar-width: thin;
 	scrollbar-color: var(--color-accent) transparent;
 }
+
 html,
 body {
-	@apply cursor-default scroll-smooth;
+	@apply cursor-default;
+}
+
+/* `scroll-behavior: smooth` fica de fora de propósito: o Lenis já anima o
+   scroll, e o src/scripts/anchor-scroll.ts intercepta os links de âncora para
+   descontar o header fixo. Ligar os dois faz a rolagem brigar consigo mesma. */
+
+/* Alpine — esconde o elemento até o Alpine assumir, evitando o flash de
+   conteúdo que deveria começar oculto. Use sempre junto com x-show. */
+[x-cloak] {
+	display: none !important;
+}
+
+/* Impede a animação de disparar na pintura inicial. A classe sai do <body> no
+   primeiro frame (ver Layout.astro). */
+.preload-transitions * {
+	transition: none !important;
+}
+
+/* Tipografia base */
+h1 {
+	@apply font-title leading-[1.15];
+}
+
+h2,
+h3,
+h4 {
+	@apply font-title;
+}
+
+p + p,
+p + ul,
+ul + p {
+	@apply mt-4;
 }

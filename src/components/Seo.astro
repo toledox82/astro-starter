@@ -1,38 +1,63 @@
 ---
-import site from '@data/site.json'
-const isHomePage = Astro.url.pathname === '/'
-let { title, description, url = Astro.url, image, type, frontmatter, noindex } = Astro.props
-title = isHomePage ? `${site.siteName} ${site.separator} ${site.title}` : `${title}`
-description = isHomePage ? `${site.description}` : `${description}`
+import site from '@/data/site.json'
+
+interface Props {
+	/** Título da aba e do <title>. Na home, cai para "siteName • title". */
+	title?: string
+	/** Título só para as redes, quando o da aba não funciona fora de contexto. */
+	ogTitle?: string
+	description?: string
+	url?: URL | string
+	/** Caminho absoluto ou URL da imagem de compartilhamento (1200×630). */
+	image?: string
+	/** 'website' na maioria das páginas, 'article' em posts. */
+	type?: string
+	noindex?: boolean
+}
+
+const { title, ogTitle, description, url = Astro.url, image, type, noindex } = Astro.props
+
+const isHome = Astro.url.pathname === '/'
+
+// Na home o título é a assinatura do site inteiro; nas internas, o da página.
+const pageTitle = isHome ? `${site.siteName} ${site.separator} ${site.title}` : title || site.title
+const socialTitle = ogTitle || pageTitle
+const pageDescription = description || site.description
+
+// og:image precisa ser absoluta — o Facebook e o WhatsApp não resolvem caminho
+// relativo. `new URL` deixa passar uma URL completa e prefixa o resto.
+const imageUrl = new URL(image || site.image.src, Astro.site ?? site.siteUrl).href
+const canonical = new URL(url, Astro.site ?? site.siteUrl).href
 ---
 
-<title>{title || site.title}</title>
-<meta name="description" content={description || site.description} />
+<title>{pageTitle}</title>
+<meta name="description" content={pageDescription} />
 
 <!-- SEO -->
-<link rel="canonical" href={url} />
+<link rel="canonical" href={canonical} />
 
 <!-- Open Graph -->
 <meta property="og:site_name" content={site.siteName} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description || site.description} />
+<meta property="og:title" content={socialTitle} />
+<meta property="og:description" content={pageDescription} />
 <meta property="og:type" content={type || 'website'} />
-<meta property="og:url" content={url} />
-<meta property="og:image" content={image || site.image.src} />
-<meta property="og:image:url" content={image || site.image.src} />
-<meta property="og:image:secure_url" content={image || site.image.src} />
-<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:secure_url" content={imageUrl} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content={image?.alt || site.image.alt} />
+<meta property="og:image:alt" content={site.image.alt} />
+<meta property="og:locale" content="pt_BR" />
 
 <!-- Twitter -->
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description || site.description} />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content={image || site.image.src} />
-<meta name="twitter:image:alt" content={title} />
-<meta name="twitter:domain" content={import.meta.env.SITE} />
+<meta name="twitter:title" content={socialTitle} />
+<meta name="twitter:description" content={pageDescription} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={site.image.alt} />
 
-<!-- Robots -->
+{
+	/* Robots — noindex e sitemap andam juntos: ao marcar uma página aqui,
+acrescente o caminho a EXCLUDED no astro.config.mjs. */
+}
 {noindex && <meta name="robots" content="noindex, nofollow" />}

@@ -3,7 +3,7 @@
 	"singleQuote": true,
 	"semi": false,
 	"printWidth": 100,
-	"htmlWhitespaceSensitivity": "ignore",
+	"htmlWhitespaceSensitivity": "strict",
 	"bracketSameLine": true,
 	"plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
 	"tailwindStylesheet": "./src/styles/global.css",

@@ -1,29 +1,75 @@
 ---
-import '@styles/global.css'
+import '@/styles/global.css'
 
-import Seo from "@components/Seo.astro";
-const { title, description, image, frontmatter, noindex } = Astro.props;
+import { Font } from 'astro:assets'
+import site from '@/data/site.json'
+import Seo from '@/components/Seo.astro'
+import Analytics from '@/components/Analytics.astro'
 
+interface Props {
+	title?: string
+	ogTitle?: string
+	description?: string
+	image?: string
+	type?: string
+	noindex?: boolean
+}
+
+const { title, ogTitle, description, image, type, noindex } = Astro.props
 ---
+
 <!doctype html>
-<html lang="pt-br">
+<html lang={site.lang}>
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		{
+			/* `interactive-widget=resizes-content` faz o teclado do celular empurrar o
+		layout em vez de cobrir o campo em foco. */
+		}
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, interactive-widget=resizes-content"
+		/>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/x-icon" sizes="32x32 64x64" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="author" content="Toledo Interactive" />
+		<meta name="author" content={site.author} />
 		<link rel="sitemap" href="/sitemap-index.xml" />
-		<Seo {title} {description} url={Astro.url} {image} {frontmatter} {noindex} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-	</head>
-	<body class="bg-background text-white">
-		<slot />
-	</body>
-</html>
 
-<style is:global>
-	[x-cloak] { display: none !important;}
-</style>
+		<Seo {title} {ogTitle} {description} url={Astro.url} {image} {type} {noindex} />
+
+		{
+			/* `preload` só na fonte que pinta acima da dobra; nas demais ele competiria
+		com o que realmente segura o primeiro render. */
+		}
+		<Font cssVariable="--font-outfit" preload />
+		<Font cssVariable="--font-inter" />
+	</head>
+
+	<body class="preload-transitions bg-background font-sans text-secondary">
+		{
+			/* Pular para o conteúdo: obrigatório em WCAG AA para quem navega por teclado
+		não ter que atravessar o menu em toda página. */
+		}
+		<a
+			href="#conteudo"
+			class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:font-bold focus:text-background">
+			Pular para o conteúdo
+		</a>
+
+		<main id="conteudo">
+			<slot />
+		</main>
+
+		<Analytics />
+
+		<script>
+			import '@/scripts/anchor-scroll'
+
+			// Libera as transições depois da primeira pintura — sem isto, tudo que
+			// tem `transition` anima sozinho no carregamento da página.
+			requestAnimationFrame(() => document.body.classList.remove('preload-transitions'))
+		</script>
+	</body></html
+>
