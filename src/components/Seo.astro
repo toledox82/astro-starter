@@ -24,10 +24,16 @@ const pageTitle = isHome ? `${site.siteName} ${site.separator} ${site.title}` : 
 const socialTitle = ogTitle || pageTitle
 const pageDescription = description || site.description
 
+// A base absoluta vem do `Astro.site` (o `site` do astro.config.mjs), e não do
+// `siteUrl`: aqui é o único lugar que precisa do protocolo, e guardar o domínio
+// limpo no site.json evita ter que remendá-lo onde ele aparece como texto — o
+// `?ref=` do rodapé, por exemplo, sairia como `https%3A%2F%2F...`.
+//
 // og:image precisa ser absoluta — o Facebook e o WhatsApp não resolvem caminho
 // relativo. `new URL` deixa passar uma URL completa e prefixa o resto.
-const imageUrl = new URL(image || site.image.src, Astro.site ?? site.siteUrl).href
-const canonical = new URL(url, Astro.site ?? site.siteUrl).href
+const base = Astro.site ?? `https://${site.siteUrl}`
+const imageUrl = new URL(image || site.image.src, base).href
+const canonical = new URL(url, base).href
 ---
 
 <title>{pageTitle}</title>
